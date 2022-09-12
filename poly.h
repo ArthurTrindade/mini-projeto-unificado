@@ -1,7 +1,6 @@
 typedef struct polynomio {
     char id[128+1];
     int p;
-    char poli[128+1];
     //double * coef;
 } Poly;
 

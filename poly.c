@@ -35,7 +35,7 @@ Poly * poly_read( int n ) {
 
     P = poly_new( n );
 
-    printf("Digite os polinônimos, ex: 'id: ax^2+bx^1+cx^0'\n");
+    printf("\nDigite os polinônimos, ex: 'id: ax^2+bx^1+cx^0'\n");
     
     for ( i = 0; i < n; i++ ) {
         scanf("%[^:]%*c %s", P[i].id, poly);
@@ -48,6 +48,7 @@ Poly * poly_read( int n ) {
 void poly_print( Poly * P, int n ) {
     int i;
     for ( i = 0; i < n; i++) {
-        printf("%s: %d\n", P[i].id, P[i].p);
+        printf("%s: %d", P[i].id, P[i].p);
     }
+    printf("\n");
 }
