@@ -3,25 +3,12 @@
 #include <string.h>
 #include <ctype.h>
 
-int char_to_int( char ch ) {
-    return ch - '0';
-}
+#include "poly.h"
 
-int poly_grau(char *str) {
-    int maior = 0, num;
-    for (int i = 0; i < strlen(str); i++) {
-        if ( str[i] == '^') {
-            num = char_to_int(str[i + 1]);
-            if (num > maior) maior = num;
-        }   
-    }
-
-    return maior;
-}
-
-void fun1( char * str, double * coef ) {
+double fun1( char * str ) {
     int i, t = 0;
     char c[128+1];
+    double coef;
 
     i = 0;
     while ( str[i] != 'x' ) {
@@ -30,30 +17,86 @@ void fun1( char * str, double * coef ) {
         i++;
     }
 
-    *coef = atof(c);
+    coef = atof( c );
+    
+    return coef;
 }
 
-int main() {
 
-    char str[] = "1x^2+3x^9-2x^0";
-    char s[128+1];
+char * norm_poly( char * poly ) {
+    char * copy = NULL;
+    int i, j, m = 0;
 
-    int i = 0;
-    int j = 0;
-    while ( i < strlen(str) ) {
-        if (str[i] == '-') {
-            s[j] = '+';
-            s[j + 1] = '-';
+    for ( i = 0; i < strlen( poly ); i++ ) {
+        if ( poly[i] == '-' ) 
+        m++;
+    }   
+
+    m += strlen( poly );
+    copy = (char *) malloc( m * sizeof(char) );
+
+    i = 0;
+    j = 0;
+
+    while ( i < strlen( poly ) ) {
+        if ( poly[i] == '-' ) {
+            copy[j] = '+';
+            copy[j + 1] = '-';
             i++;
             j += 2;
         } else {
-            s[j] = str[i];
+            copy[j] = poly[i];
             i++;
             j++;
         }
     }
+    
+    return copy;
+}
 
-    int grau = poly_grau(s) + 1;
+double * poly_coefs( char * poly ) {
+    int i;
+    int grau = poly_grau( poly ) + 1;
+    double coef;
+    double *coefs = NULL;
+
+    coefs = (double *) malloc( grau * sizeof( double ) );
+
+    for ( i = 0; i < grau; i++) {
+        coefs[i] = 0.0;
+    }
+
+    poly = norm_poly( poly );
+
+    char* token = strtok(poly, "+");
+
+    int tam, g;
+    while (token != NULL) {
+        tam = strlen(token);
+        coef = fun1(token);
+        g = char_to_int(token[tam - 1]);
+        coefs[g] = coef;
+        token = strtok(NULL, "+");
+    }
+
+    return coefs;
+}
+
+int main() {
+
+    char *s;
+    scanf("%s", s);
+
+    int grau = poly_grau( s ) + 1;
+
+    double *coefs = NULL;
+    coefs = poly_coefs( s );
+
+    //s = norm_poly( s );
+
+
+    /* 
+        int grau = poly_grau(s) + 1;
     double coefs[grau];
     double coef;
 
@@ -72,17 +115,20 @@ int main() {
         token = strtok(NULL, "+");
     }
 
+    */
+    
     for (int i = 0; i < grau; i++) {
         printf("%lf\n", coefs[i]);
     }
   
-
     for (int i = 0; i < grau; i++) {
         if (coefs[i] != 0) {
             printf("%+.2lfx^%d", coefs[i], i);
             if ( i == grau - 1) printf("\n"); 
         }
-
     }
+
+    free(coefs);
+    
     return 0;
 }

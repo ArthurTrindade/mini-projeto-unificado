@@ -1,7 +1,7 @@
 typedef struct polynomio {
     char id[128+1];
     int p;
-    //double * coef;
+    double * coef;
 } Poly;
 
 /**
@@ -27,3 +27,9 @@ int char_to_int( char ch );
  * @return int o valor do maior expoente (grau)
  */
 int poly_grau(char *str);
+
+double * poly_coefs( char * poly );
+
+char * norm_poly( char * poly );
+
+double fun1( char * str );
