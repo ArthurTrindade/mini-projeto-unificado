@@ -40,7 +40,7 @@ int poly_grau(char *str) {
         }   
     }
 
-    return maior + 1;
+    return maior;
 }
 
 double poly_get_coef( char * str ) {
@@ -58,6 +58,15 @@ double poly_get_coef( char * str ) {
     
     return coef;
 }
+
+void poly_norm_id( char * id ) {
+    int i;
+    int len = strlen(id);
+ 
+    for (i = 0; i < len - 1; i++) {
+        id[i] = id[i];
+    }
+} 
 
 char * poly_norm( char * poly ) {
     char * copy = NULL;
@@ -94,7 +103,7 @@ char * poly_norm( char * poly ) {
 
 double * poly_coefs( char * poly ) {
     int i;
-    int grau = poly_grau( poly );
+    int grau = poly_grau( poly ) + 1;
     double coef;
     double *coefs = NULL;
 
@@ -132,7 +141,8 @@ Poly * poly_read( int n ) {
     
     for ( i = 0; i < n; i++ ) {
         scanf("%[^:]%*c %s", P[i].id, poly);
-        P[i].p = poly_grau( poly );
+        poly_norm_id(P[i].id);
+        P[i].p = poly_grau( poly ) + 1;
         P[i].coef = poly_coefs( poly );
     }
 
@@ -161,4 +171,14 @@ void poly_print_all( Poly * P, int n ) {
     }
 
     printf("\n");
+}
+
+Poly operacoes( char * id, Poly * P, int n ) {
+    int i;
+    for ( i = 0; i < n; i++ ) {
+        if ( strcmp(id,  P[i].id) == 0 ) {
+            return P[i];
+        }
+    }
+
 }

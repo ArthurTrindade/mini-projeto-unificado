@@ -97,3 +97,5 @@ char * poly_norm( char * poly );
  * @return double retorna o valor do coeficiente
  */
 double poly_get_coef( char * str );
+
+Poly operacoes( char * id, Poly * P, int n );
