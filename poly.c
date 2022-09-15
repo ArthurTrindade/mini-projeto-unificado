@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "poly.h"
 
@@ -59,14 +60,15 @@ double poly_get_coef( char * str ) {
     return coef;
 }
 
-void poly_norm_id( char * id ) {
-    int i;
+void poly_norm_id(char * id, char * new_id ) {
+    int i, j = 0;
     int len = strlen(id);
- 
-    for (i = 0; i < len - 1; i++) {
-        id[i] = id[i];
+
+    for ( i = 1; i < len; i++ ) {
+        new_id[j] = id[i];
+        j++;
     }
-} 
+}
 
 char * poly_norm( char * poly ) {
     char * copy = NULL;
@@ -140,8 +142,8 @@ Poly * poly_read( int n ) {
     printf("\nDigite os polinônimos, ex: 'id: ax^2+bx^1+cx^0'\n");
     
     for ( i = 0; i < n; i++ ) {
-        scanf("%[^:]%*c %s", P[i].id, poly);
-        poly_norm_id(P[i].id);
+        scanf("%[^:]%*c %s", id, poly);
+        poly_norm_id(id, P[i].id);
         P[i].p = poly_grau( poly ) + 1;
         P[i].coef = poly_coefs( poly );
     }
@@ -168,17 +170,40 @@ void poly_print_all( Poly * P, int n ) {
                 printf("%+.2lfx^%d", P[i].coef[j], j); 
             }
         }  
+        printf("\n");
     }
 
-    printf("\n");
 }
 
-Poly operacoes( char * id, Poly * P, int n ) {
+Poly get_poly( char * id, Poly * P, int n ) {
     int i;
     for ( i = 0; i < n; i++ ) {
-        if ( strcmp(id,  P[i].id) == 0 ) {
+        if ( strcmp( id, P[i].id ) == 0) {
             return P[i];
         }
     }
+}
 
+void poly_operations(Poly p1, char ope, Poly p2) {
+    int grau, i;
+    if ( p1.p >=  p2.p) grau = p1.p;
+    else grau = p2.p; 
+
+    double res[grau];
+
+    for ( i = 0; i < grau; i++) {
+        res[i] = 0.0;
+    }
+
+    if ( ope == '+' ) {
+        for (i = 0; i < grau; i++) {
+            res[i] = p1.coef[i] + p2.coef[i];
+        }
+    } else if ( ope == '-' ) {
+        for (i = 0; i < grau; i++) {
+            res[i] = p1.coef[i] - p2.coef[i];
+        }
+    }
+
+    poly_print(res, grau);
 }

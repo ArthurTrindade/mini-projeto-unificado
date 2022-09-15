@@ -98,4 +98,6 @@ char * poly_norm( char * poly );
  */
 double poly_get_coef( char * str );
 
-Poly operacoes( char * id, Poly * P, int n );
+Poly get_poly( char * id, Poly * P, int n );
+
+void poly_operations(Poly p1, char ope, Poly p2);
